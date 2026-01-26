@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: api-center
+
+  datasource:
+    url: jdbc:postgresql://ep-aged-union-ahyfulaf-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channelBinding=require
+    username: neondb_owner
+    password: npg_drEjFQ6cP8GD
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      # create: 시작할 때마다 다 지우고 새로 만듦 (주의!)
+      # update: 변경된 스키마만 반영 (개발용 추천)
+      # validate: 엔티티와 테이블이 맞는지만 확인 (운영용)
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        "[format_sql]": true
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+springdoc:
+  api-docs:
+    path: /docs
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true # 요청 처리 시간 표시
+
+# 애플리케이션 설정
+app:
+  base-url: ${APP_BASE_URL:http://localhost:8080}
+
+# JWT 설정
+jwt:
+  secret: ${JWT_SECRET:your-secret-key-change-this-in-production-min-256-bits}
+  access-token-expiration: 3600000 # 1시간 (밀리초)
+  refresh-token-expiration: 604800000 # 1주일 (밀리초)
+  cookie:
+    access-token-name: access_token
+    refresh-token-name: refresh_token
+    http-only: true
+    secure: true # HTTPS 환경에서만 true
+    same-site: Strict
+    path: /
+
+# 보안 설정
+security:
+  account:
+    max-login-failures: 5 # 최대 로그인 실패 횟수
+  password:
+    min-length: 8 # 최소 비밀번호 길이
+    require-uppercase: true # 대문자 필수
+    require-lowercase: true # 소문자 필수
+    require-digit: true # 숫자 필수
+    require-special-char: true # 특수문자 필수
